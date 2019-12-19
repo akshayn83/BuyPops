@@ -10,6 +10,7 @@ import csv
 from nsepy import get_history
 import datetime
 import time
+import settings
 
 def todayAt (hr, min=0, sec=0, micros=0):
    now = datetime.datetime.now()
@@ -20,8 +21,10 @@ def populateData():
     if timeNow > todayAt(12) and timeNow < todayAt(21): # NSE server accessible only in this time.
 #        data = get_history(symbol="SBIN", start=datetime.date(2019,10,1), end=datetime.date(2019,11,2))
 #        print(data)
+        
+        stockFile = settings.NSEDATAPATH + 'ind_nifty500list.csv'
 
-        with open('/Python Workspace/BuyPops/NSEData/ind_nifty500list.csv', 'r') as csv_file:
+        with open(stockFile, 'r') as csv_file:
             csv_reader = csv.DictReader(csv_file)
         
             for line in csv_reader:
@@ -29,7 +32,7 @@ def populateData():
  #               with open('/Python Workspace/BuyPops/NSEData/HistoryDataEOD/'+str(line['Company Name'])+'.csv', 'w') as new_file:
                 try:
                     data = get_history(symbol=str(line['Symbol']), start=datetime.date(2015,1,1), end=datetime.date(2019,12,18))
-                    saveFile = open('/Python Workspace/BuyPops/NSEData/HistoryDataEOD/'+str(line['Company Name'])+'.csv','w')
+                    saveFile = open(settings.HISTORYDATAPATH+str(line['Company Name'])+'.csv','w')
                     saveFile.write(data.to_string())
                     saveFile.close()
                     print('Updating::: '+str(line['Company Name']))
@@ -37,7 +40,8 @@ def populateData():
                 except Exception as e:
                     print('Did not read'+str(line['Symbol']))
                     print(e)
-##               fieldnames = ['first_name', 'last_name']        
+##               fieldnames = ['first_name', 'last_name']
+        
 
     else:
         print("Outside NSE server access time")
