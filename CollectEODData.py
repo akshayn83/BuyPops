@@ -32,7 +32,7 @@ def populateData():
  #               with open('/Python Workspace/BuyPops/NSEData/HistoryDataEOD/'+str(line['Company Name'])+'.csv', 'w') as new_file:
                 try:
                     data = get_history(symbol=str(line['Symbol']), start=datetime.date(2015,1,1), end=datetime.date(2019,12,18))
-                    saveFile = open(settings.HISTORYDATAPATH+str(line['Company Name'])+'.csv','w')
+                    saveFile = open(settings.HISTORYPATH+str(line['Company Name'])+'.csv','w')
                     saveFile.write(data.to_string())
                     saveFile.close()
                     print('Updating::: '+str(line['Company Name']))
@@ -40,16 +40,14 @@ def populateData():
                 except Exception as e:
                     print('Did not read'+str(line['Symbol']))
                     print(e)
-##               fieldnames = ['first_name', 'last_name']
         
 
     else:
         print("Outside NSE server access time")
-    
-#cwd = os.getcwd()
-#print(cwd)
-        
+
 populateData()
+
+
 
 #data = get_history(symbol="COALINDIA", start=datetime.date(2015,1,1), end=datetime.date(2019,12,18))
 #print(data)
