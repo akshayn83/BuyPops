@@ -9,6 +9,5 @@ import configparser
 
 config = configparser.ConfigParser()
 config.read('settings.ini')
-FILEPATH = config.get('Settings','FILEPATH')
 NSEDATAPATH = config.get('Settings','NSEDATAPATH')
 HISTORYPATH = config.get('Settings','HISTORYPATH')
