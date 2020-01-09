@@ -6,11 +6,12 @@ Created on Wed Dec 18 21:39:08 2019
 """
 
 import csv
-#import os
 from nsepy import get_history
 import datetime
 import time
 import settings
+
+log = settings.LOGGER
 
 def todayAt (hr, min=0, sec=0, micros=0):
    now = datetime.datetime.now()
@@ -20,7 +21,7 @@ def populateData():
     timeNow = datetime.datetime.now()
     if timeNow > todayAt(12) and timeNow < todayAt(21): # NSE server accessible only in this time.
 #        data = get_history(symbol="SBIN", start=datetime.date(2019,10,1), end=datetime.date(2019,11,2))
-#        print(data)
+#        log.info(data)
         
         stockFile = settings.NSEDATAPATH + 'ind_nifty500list.csv'
 
@@ -28,31 +29,26 @@ def populateData():
             csv_reader = csv.DictReader(csv_file)
         
             for line in csv_reader:
-                print(line['Company Name'])
+                log.info(line['Company Name'])
  #               with open('/Python Workspace/BuyPops/NSEData/HistoryDataEOD/'+str(line['Company Name'])+'.csv', 'w') as new_file:
                 try:
                     data = get_history(symbol=str(line['Symbol']), start=datetime.date(2015,1,1), end=datetime.date(2019,12,18))
                     saveFile = open(settings.HISTORYDATAPATH+str(line['Company Name'])+'.csv','w')
                     saveFile.write(data.to_string())
                     saveFile.close()
-                    print('Updating::: '+str(line['Company Name']))
+                    log.info('Updating::: %s',line['Company Name'])
                     time.sleep(5)
                 except Exception as e:
-                    print('Did not read'+str(line['Symbol']))
-                    print(e)
-##               fieldnames = ['first_name', 'last_name']
-        
+                    log.error('Did not read %s',line['Symbol'])
+                    log.error(e)
 
     else:
-        print("Outside NSE server access time")
-    
-#cwd = os.getcwd()
-#print(cwd)
-        
+        log.info("Outside NSE server access time")
+            
 populateData()
 
 #data = get_history(symbol="COALINDIA", start=datetime.date(2015,1,1), end=datetime.date(2019,12,18))
-#print(data)
+#log.info(data)
 #
 #        csv_writer = csv.DictWriter(new_file, fieldnames=fieldnames, delimiter='\t')
 #
