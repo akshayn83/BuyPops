@@ -16,7 +16,6 @@ import requests
 import yfinance as yf
 import talib as ta
 
-
 # Get historical OHLC data from yahoo finance.
 def getHistoryData():
 ##################### TRIAL CODE ############################################
