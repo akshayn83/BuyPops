@@ -11,7 +11,8 @@ import datetime
 #import time
 #import settings
 import pandas as pd
-
+import trendet
+import investpy
 
 #currentDate = datetime.date.today()
 #print(currentDate)
@@ -216,8 +217,25 @@ def checkDualCandles():
     with open('/Python Workspace/BuyPops/Alerts/dualCandle.csv', 'w') as newFile:
         dualCandleFormations.to_csv(newFile, index=True, sep ='\t')
         newFile.close()
+
+
+def determineTrend():
+    
+    df = trendet.identify_trends(stock='BBVA',
+                                 country='Spain',
+                                 from_date='01/01/2018',
+                                 to_date='01/01/2019',
+                                 window_size=5,
+                                 trend_limit=3,
+                                 labels=['A', 'B', 'C'])
+    
+    df.reset_index(inplace=True)
+    print(df)
+    
+#determineTrend()
     
 checkMasterBreakout()
 hammerToday()
 checkDualCandles()
 LRCToday()
+        
