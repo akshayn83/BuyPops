@@ -232,10 +232,39 @@ def determineTrend():
     df.reset_index(inplace=True)
     print(df)
     
-#determineTrend()
+def checkLocation():
+    heading = ['Date', 'Stock', 'Alert','Price']
+    alerts = []
+    eodDirectory = '/Python Workspace/BuyPops/NSEData/HistoryDataEOD/'
+    alertsDirectory = '/Python Workspace/BuyPops/Alerts'
+    with os.scandir(eodDirectory) as i:
+        for entry in i:
+            if entry.is_file():
+                symbol = entry.name.split('.')[0]
+                filename = eodDirectory + entry.name
+                try:
+                    stockData = pd.read_csv(filename, sep='\t')
+                    Close = stockData.iloc[-1]['Close']
+                    priceMax = max(stockData['Close'])
+                    priceMin =  min(stockData['Close'])
+                    priceRange =  priceMax - priceMin
+                    topThird = priceMax - (priceRange/3)
+                    if(Close >=  topThird):
+                        alert = [stockData.iloc[-1]['Date'], symbol, 'Top Third', stockData.iloc[-1]['Close']]
+                        alerts.append(alert)
+                except Exception as e:
+                    print(e)
+    locationMap = pd.DataFrame(alerts,columns=heading)
+    print("Hammer DF:")
+    print(locationMap)
+    with open('/Python Workspace/BuyPops/Alerts/LocationMap.csv', 'w') as newFile:
+        locationMap.to_csv(newFile, index=True, sep ='\t')
+        newFile.close()
     
+#determineTrend()
+checkLocation()    
 checkMasterBreakout()
 hammerToday()
 checkDualCandles()
 LRCToday()
-        
+
