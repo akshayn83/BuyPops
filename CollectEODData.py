@@ -16,25 +16,21 @@ import requests
 import yfinance as yf
 import talib as ta
 
-# Get historical OHLC data from yahoo finance.
+############################################################################
+# getHistoryData(): 
+# Get historical OHLC data from yahoo finance. and add indicators to the same.
+# Improvement: Current all data needs to be downloaded every day
+# Find way to only update and append missing data.
+#############################################################################
 def getHistoryData():
-##################### TRIAL CODE ############################################
-   # data = yf.download(tickers="HDFCBANK.NS", period="5d", interval="1d")
-   #
-   # saveFile =  open('/Python Workspace/BuyPops/NSEData/HistoryDataEOD/123TrialFile.csv', 'w')
-   # saveFile.write(data.to_string())
-   # saveFile.close()
-################################################################################
 
     stockFile = settings.NSEDATAPATH + 'ind_nifty500list.csv'
     with open(stockFile, 'r') as csv_file:
         csv_reader = csv.DictReader(csv_file)
         for line in csv_reader:
-            print(line['Company Name'])
             with open('/Python Workspace/BuyPops/NSEData/HistoryDataEOD/'+str(line['Symbol'])+'.csv', 'w') as newFile:
                 try:
                     tickerSymb = str(line['Symbol'])+'.NS'
-                    print(tickerSymb)
                     data = yf.download(tickers=tickerSymb, period="max", interval="1d")
                     #saveFile = open(settings.HISTORYPATH+str(line['Company Name'])+'.csv','w')
                     #data.reset_index(inplace=True)
@@ -71,41 +67,39 @@ def todayAt(hr, min=0, sec=0, micros=0):
 
 
 
-# Populates Data from startDate to Today's Date by connecting to NSE archives and downloading bhavcopy for each day.
-# MAX limit of StartDate is 3 months before Today.
-def populateData(startDate):
-    currentDate = datetime.date.today() - datetime.timedelta(days=1)
-#    startDate = datetime.date(1994, 11, 7)
-
-    print(startDate)
-    print(currentDate)
-    stockFile = settings.NSEDATAPATH + 'ind_nifty500list.csv'
-    with open(stockFile, 'r') as csv_file:
-        csv_reader = csv.DictReader(csv_file)
-
-        for line in csv_reader:
-            print(line['Company Name'])
-            with open('/Python Workspace/BuyPops/NSEData/HistoryDataEOD/'+str(line['Company Name'])+'.csv', 'a') as new_file:
-                try:
-     #              data = get_history(symbol=str(line['Symbol']), start=datetime.date(2015,1,1), end=datetime.date(2019,12,18))
-                    tickerSymb = str(line['Symbol'])+'.NS'
-                    print(tickerSymb)
-                    data = yf.download(tickers=tickerSymb, start=str(startDate),end=str(currentDate))
-                    data.round(6)
-                    print(data)
-
-                    #data.tail()
-
-                    saveFile = open(settings.HISTORYPATH+str(line['Company Name'])+'.csv','a')
-                    #saveFile.write('\n')
-                    data.to_csv(settings.HISTORYPATH+str(line['Company Name'])+'.csv', mode='a', header=False, sep = '\t')
-                    #saveFile.write(data.to_string(header=False))
-                    saveFile.close()
-                    print('Updating::: '+str(line['Company Name']))
-                    #time.sleep(1)
-                except Exception as e:
-                    print('Did not read '+str(line['Symbol']))
-                    print(e)
+#def populateData(startDate):
+#    currentDate = datetime.date.today() - datetime.timedelta(days=1)
+##    startDate = datetime.date(1994, 11, 7)
+#
+#    print(startDate)
+#    print(currentDate)
+#    stockFile = settings.NSEDATAPATH + 'ind_nifty500list.csv'
+#    with open(stockFile, 'r') as csv_file:
+#        csv_reader = csv.DictReader(csv_file)
+#
+#        for line in csv_reader:
+#            print(line['Company Name'])
+#            with open('/Python Workspace/BuyPops/NSEData/HistoryDataEOD/'+str(line['Company Name'])+'.csv', 'a') as new_file:
+#                try:
+#     #              data = get_history(symbol=str(line['Symbol']), start=datetime.date(2015,1,1), end=datetime.date(2019,12,18))
+#                    tickerSymb = str(line['Symbol'])+'.NS'
+#                    print(tickerSymb)
+#                    data = yf.download(tickers=tickerSymb, start=str(startDate),end=str(currentDate))
+#                    data.round(6)
+#                    print(data)
+#
+#                    #data.tail()
+#
+#                    saveFile = open(settings.HISTORYPATH+str(line['Company Name'])+'.csv','a')
+#                    #saveFile.write('\n')
+#                    data.to_csv(settings.HISTORYPATH+str(line['Company Name'])+'.csv', mode='a', header=False, sep = '\t')
+#                    #saveFile.write(data.to_string(header=False))
+#                    saveFile.close()
+#                    print('Updating::: '+str(line['Company Name']))
+#                    #time.sleep(1)
+#                except Exception as e:
+#                    print('Did not read '+str(line['Symbol']))
+#                    print(e)
 
 
 
@@ -140,29 +134,13 @@ def populateData(startDate):
 #                 print(e)
 #         else:
 #             print("Weekend:" + str(weekno))
-############################################################################################################
 
 ### Bhavcopy browser Link sample ###
 #    webbrowser.open("https://archives.nseindia.com/products/content/sec_bhavdata_full_20012020.csv")
-
-#def calculateSMA(period)
-
-# Traverse rows to <period>
-# calculate SMA at <period>
+############################################################################################################
 
 
-####### Calculate EMA ######
-#def calculateEMA(period)
-
-# Traverse Rows to <period>
-# calculate SMA at period from previous close
-# Calculate EMA from next row.
-# Repeat till end of rows.
-
-
-
-
-###### Code for Reading Alerts File ####################
+###### Code for Reading Alerts File : TBD ####################
 def readAlertDefs():
     alertConfigFile = 'AlertConfig.csv'
 
