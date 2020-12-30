@@ -151,13 +151,13 @@ def LRCToday(sortedList):
                             Close = stockData.iloc[-1]['Close']
                             HalfWay = (Low + (High - Low)/2)
         #                    print(Open, High, Low, Close)
-                            if (abs(Open - Close) >= 0.75*(High - Low)):
-                                LRCDetected = True
+                            if (abs(Open - Close) >= 0.675*(High - Low)):
                                 if(Open> Close):
                                     Note = "Bearish LRC"
                                     if(Open == High):
                                         Note = "Shaven Top"
                                 elif(Close > Open):
+                                    LRCDetected = True
                                     Note = "Bullish LRC"
                                     if(Open == Low):
                                         Note = "Shaven Bottom"
@@ -203,14 +203,14 @@ def checkDualCandles(sortedList):
                             ClosePrev = stockData.iloc[-2]['Close']
                             HalfWayPrev = (LowPrev + (HighPrev - LowPrev)/2) 
         #                    print(Open, High, Low, Close)
-                            if (abs(OpenPrev - ClosePrev) >= 0.75*(HighPrev - LowPrev)):
+                            if (abs(OpenPrev - ClosePrev) >= 0.675*(HighPrev - LowPrev)):
         #                        LRCDetected = True
                                 if(OpenPrev > ClosePrev):
                                     Open = stockData.iloc[-1]['Open']
                                     High = stockData.iloc[-1]['High']
                                     Low = stockData.iloc[-1]['Low']
                                     Close = stockData.iloc[-1]['Close']
-                                    if (abs(Open - Close) >= 0.75*(High - Low)):
+                                    if (abs(Open - Close) >= 0.675*(High - Low)):
                                         if(Close > Open):
                                             DualCandleDetected = True
                                             #Harami pattern

@@ -507,3 +507,5 @@ NSEData/HistoryDataEOD/ZYDUSWELL.csv
 Logs/BuyPopsExp.log
 Alerts/HammerToday - Full Data.csv
 NSEData/HistoryDataEOD/AFFLE.csv
+*.csv
+*.log
