@@ -59,6 +59,7 @@ def getHistoryData():
                         exceptFile.write(log)
                         exceptFile.close()                           
                     print(e)
+
     #    print(data)
 
 def todayAt(hr, min=0, sec=0, micros=0):
