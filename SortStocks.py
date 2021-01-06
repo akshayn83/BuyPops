@@ -71,9 +71,11 @@ def checkMasterBreakout(sortedList):
                         try:
                             stockData = pd.read_csv(filename, sep = '\t')
             #                stockData = pd.read_csv(filename,usecols=[ 'Date','Open','High','Low','Close','Adj Close','Volume','EMA_5','EMA_13','EMA_20','EMA_50','EMA_75','EMA_100','EMA_200','EMA_300','EMA_365','RSI_14'])
-        #                    print(stockData)
+                            #print(stockData)
+                        
          #                   print("close: ", stockData.iloc[-1]['Close'], "max: ", stockData['Close'].max())
-                            if ((stockData.iloc[-1]['Close']) >= (stockData['Close'].max())):
+                            if (((stockData.iloc[-1]['Close']) >= (stockData['Close'].max()) ) and 
+                                ((stockData.iloc[-2]['Close']) < (stockData[:-1]['Close'].max()))):
                                 alert = [stockData.iloc[-1]['Date'], symbol, 'Master Breakout', stockData.iloc[-1]['Close']]
                                 alerts.append(alert)
                         except Exception as e:
@@ -272,7 +274,6 @@ def determineTrend():
 #determineTrend()
 
 #def createList()
-        
 locMap = checkLocation()    
 
 hammerToday(locMap['Stock'])
