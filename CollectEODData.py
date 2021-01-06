@@ -151,7 +151,45 @@ def readAlertDefs():
         for line in csv_reader:
             print(line['Scrip Symbol'])
 ########################################################
+            
+            
+def updateEODData():
+    stockFile = settings.NSEDATAPATH + 'ind_nifty500list.csv'
+    with open(stockFile, 'r') as csv_file:
+        csv_reader = csv.DictReader(csv_file)
+        for line in csv_reader:
+            with open('/Python Workspace/BuyPops/NSEData/HistoryDataEOD/'+str(line['Symbol'])+'.csv', 'a') as newFile:
+                try:
+                    tickerSymb = str(line['Symbol'])+'.NS'
+                    data = yf.download(tickers=tickerSymb, period="1d", interval="1d")
+                    #saveFile = open(settings.HISTORYPATH+str(line['Company Name'])+'.csv','w')
+                    #data.reset_index(inplace=True)
+                    
+#                    data['EMA_5'] = ta.EMA(data['Close'], 5)
+#                    data['EMA_13'] = ta.EMA(data['Close'], 13)
+#                    data['EMA_20'] = ta.EMA(data['Close'], 20)
+#                    data['EMA_50'] = ta.EMA(data['Close'], 50)
+#                    data['EMA_75'] = ta.EMA(data['Close'], 75)
+#                    data['EMA_100'] = ta.EMA(data['Close'], 100)
+#                    data['EMA_200'] = ta.EMA(data['Close'], 200)
+#                    data['EMA_300'] = ta.EMA(data['Close'], 300)
+#                    data['EMA_365'] = ta.EMA(data['Close'], 365)
+#                    data['RSI_14'] = ta.RSI(data['Close'],14)
 
+#                    newFile.write(data.to_string())
+#                    newFile.write('\n')
+                    data.to_csv(newFile, mode = 'a', header = False, index=True, sep ='\t')
+                    newFile.close()
+                    print('Updating::: '+str(line['Company Name']))
+                    #time.sleep(5)
+                except Exception as e:
+                    print('Did not read'+str(line['Symbol']))
+                    with open('/Python Workspace/BuyPops/Logs/BuyPopsExp.log', 'a') as exceptFile:
+#                        log = "EXCEPTION:"+ str(datetime.datetime.now())+ " Data not read for : " + str(line['Symbol'] + " " + e  + "\n"
+                        log = "EXCEPTION: "+ str(datetime.datetime.now())+ " Data not read for : "+ str(line['Symbol']) + " " +str(e)  + "\n"
+                        exceptFile.write(log)
+                        exceptFile.close()                           
+                    print(e)
 #readAlertDefs()
 #populateData(datetime.date.today() - datetime.timedelta(days=2))
 getHistoryData()
