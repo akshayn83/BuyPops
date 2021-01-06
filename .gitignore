@@ -509,4 +509,5 @@ Alerts/HammerToday - Full Data.csv
 NSEData/HistoryDataEOD/AFFLE.csv
 *.csv
 *.log
+*.csv
 
