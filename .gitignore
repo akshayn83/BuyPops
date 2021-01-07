@@ -511,3 +511,5 @@ NSEData/HistoryDataEOD/AFFLE.csv
 *.log
 *.csv
 
+*.log
+*.csv

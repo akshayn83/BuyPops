@@ -13,7 +13,7 @@ import datetime
 import pandas as pd
 import trendet
 import investpy
-from CollectEODData import updateEODData
+#from CollectEODData import updateEODData
 
 ##################################################################################
 # checkTopThird(stockData):
@@ -48,14 +48,16 @@ def checkMasterBreakout(stockData):
 # Check the type of candlestic on the last daty
 # Retursn a string as a type of detected candle
 ##################################################################################
-def checkCandleType(stockData):
+def checkCandleType(stockData,symbol):
     candleType = ''
     Open = stockData.iloc[-1]['Open']
     High = stockData.iloc[-1]['High']
     Low = stockData.iloc[-1]['Low']
     Close = stockData.iloc[-1]['Close']
     HalfWay = (Low + (High - Low)/2)
-#   print(Open, High, Low, Close)
+    if(symbol =='BAJAJ-AUTO' or symbol == 'BAJAJCON'):
+        print(symbol)
+        print(Open, High, Low, Close)
     if (Open >= HalfWay and Close >= HalfWay):
         if(((Open < Close) and ((High-Open) <= 1.5*(Open - Low))) or ((Close <= Open) and ((High - Close) <= 1.5*(Close - Low)))):
             candleType = 'Hammer'
@@ -149,12 +151,13 @@ def checkAlerts():
         for entry in i:
             if entry.is_file():
                 symbol = entry.name.split('.')[0]
+
                 filename = eodDirectory + entry.name #                print(filename)
                 try:
+                    alertPoints = 0
                     stockData = pd.read_csv(filename, sep='\t')
                     if(checkTopThird(stockData) == True):
-                        alertPoints = 0
-                        candleType = checkCandleType(stockData)
+                        candleType = checkCandleType(stockData,symbol)
                         if(candleType != ''):
                             alertPoints += 1
                         candlePatttern = checkCandlePattern(stockData)
@@ -166,15 +169,17 @@ def checkAlerts():
                             alertPoints += 1
                         else:
                             masterBreakout = 'N'
+                        
                     if(alertPoints > 0):
                         alert = [stockData.iloc[-1]['Date'], symbol, candleType, candlePatttern, 
                                  masterBreakout, stockData.iloc[-1]['Close'], alertPoints]
                         alerts.append(alert)
                        
                 except Exception as e:
+                    print(symbol)
                     print(e)
     generatedAlerts = pd.DataFrame(alerts,columns=heading)
-    print(generatedAlerts)
+    print(generatedAlerts.shape)
     if os.path.isfile(alertsFile):
         with open(alertsFile, 'a') as newFile:
             generatedAlerts.to_csv(newFile, header = False, index=False, sep ='\t')
@@ -184,6 +189,5 @@ def checkAlerts():
             generatedAlerts.to_csv(newFile, index=False, sep ='\t')
             newFile.close()
 
-updateEODData()
 
 checkAlerts()
