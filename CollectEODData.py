@@ -48,6 +48,7 @@ def getHistoryData():
 
 #                    newFile.write(data.to_string())
 #                    newFile.write('\n')
+                    data.dropna(inplace=True)
                     data.to_csv(newFile, index=True, sep ='\t')
                     newFile.close()
                     print('Updating::: '+str(line['Company Name']))
@@ -178,6 +179,7 @@ def updateEODData():
 
 #                    newFile.write(data.to_string())
 #                    newFile.write('\n')
+                    data.dropna(inplace=True)
                     data.to_csv(newFile, mode = 'a', header = False, index=True, sep ='\t')
                     newFile.close()
                     print('Updating::: '+str(line['Company Name']))

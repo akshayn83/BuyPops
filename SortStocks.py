@@ -20,12 +20,13 @@ import investpy
 # to check where the stock price is currently with respect to the entire price range. 
 # returns True if stock is in top 1/3rd of their range
 ##################################################################################
-def checkTopThird(stockData):
+def checkTopThird(stockData,symbol):
     Close = stockData.iloc[-1]['Close']
     priceMax = max(stockData['Close'])
     priceMin =  min(stockData['Close'])
     priceRange =  priceMax - priceMin
     topThird = priceMax - (priceRange/3)
+    print(symbol, Close, priceMax, priceRange)
     if(Close >=  topThird):
         return True
     else:
@@ -154,9 +155,10 @@ def checkAlerts():
 
                 filename = eodDirectory + entry.name #                print(filename)
                 try:
-                    alertPoints = 0
+                    
                     stockData = pd.read_csv(filename, sep='\t')
-                    if(checkTopThird(stockData) == True):
+                    if(checkTopThird(stockData,symbol) == True):
+                        alertPoints = 0
                         candleType = checkCandleType(stockData,symbol)
                         if(candleType != ''):
                             alertPoints += 1
