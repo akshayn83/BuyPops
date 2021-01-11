@@ -155,10 +155,9 @@ def checkAlerts():
 
                 filename = eodDirectory + entry.name #                print(filename)
                 try:
-                    
+                    alertPoints = 0
                     stockData = pd.read_csv(filename, sep='\t')
                     if(checkTopThird(stockData,symbol) == True):
-                        alertPoints = 0
                         candleType = checkCandleType(stockData,symbol)
                         if(candleType != ''):
                             alertPoints += 1
